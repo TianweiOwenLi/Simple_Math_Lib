@@ -1,12 +1,21 @@
-fun fact 0 f = f (1) | fact n f = fact (n-1) (f o (fn x => n * x))
 
-fun en 0 = [] | en n = n :: en (n-1)
+fun enum 0 = [] | enum n = n :: en (n-1)
+
+fun fact 0 = 1 | fact n = n * fact (n-1)
+
+fun 
 
 
 fun part n [] = 0 
   | part n [x] = if n mod x = 0 then 1 else 0
-  | part n (x::l) = if x > n then part n l 
-                    else part (n-x) (x::l) + part n l;
+  | part n (x::l) = if x > n then part n l else part (n-x) (x::l) + part n l;
+
+
+
+
+
+
+(* fun cps_fact 0 f = f (1) | cps_fact n f = fact (n-1) (f o (fn x => n * x)) *)
 
 (* fun cps_part n [] h = h 0
   | cps_part n [x] h = if n mod x = 0 then h 1 else h 0
