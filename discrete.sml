@@ -1,9 +1,43 @@
+datatype 'a set = Set of 'a list
 
-fun enum 0 = [] | enum n = n :: en (n-1)
+fun mp f (x, y) = (f x, f y)
+
+fun setin (eq : 'a * 'a -> bool) (Set [] : 'a set) (n : 'a) : bool = false
+  | setin eq (Set (x::xs)) (n) = eq (x, n) orelse setin eq (Set xs) n
+
+fun setnin eq s n = not (setin eq s n)
+
+fun setadd eq (Set xs) x = if setin eq (Set xs) x then Set xs else Set (x::xs)
+
+fun no_dupes (eq : 'a * 'a -> bool) (Set ([]) : 'a set ) : 'a set = Set ([])
+  | no_dupes eq (Set (x::xs)) = 
+      if setin eq (Set (xs)) x then no_dupes eq (Set (xs)) 
+      else setadd eq (no_dupes eq (Set xs)) x
+
+fun U (eq : 'a * 'a -> bool) (Set [] : 'a set) (R : 'a set) : 'a set = R
+  | U eq (Set (x::xs)) R = let 
+                         val mid = U eq (Set xs) R
+                       in
+                         if setin eq R x then mid else setadd eq mid x
+                       end
+
+fun N (eq : 'a * 'a -> bool) (Set [] : 'a set) (R : 'a set) : 'a set = Set []
+  | N eq (Set (x::xs)) R = let
+                           val mid = N eq (Set xs) R
+                         in
+                           if setin eq R x then setadd eq mid x else mid
+                         end
+
+fun setmin (eq : 'a * 'a -> bool) (Set [] : 'a set) (R : 'a set) : 'a set = Set []
+  | setmin eq (Set (x::xs)) R = let
+                                  val mid = setmin eq (Set xs) R
+                                in
+                                  if setin eq R x then mid else setadd eq mid x
+                                end
+
+fun enum 0 = [] | enum n = n :: enum (n-1)
 
 fun fact 0 = 1 | fact n = n * fact (n-1)
-
-fun 
 
 
 fun part n [] = 0 
